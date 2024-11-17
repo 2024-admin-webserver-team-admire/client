@@ -1,9 +1,17 @@
 import useAuth from 'hooks/useAuth'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import useLogin from 'hooks/useLogin'
+import { useCallback } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Header() {
   const { isAuthorized } = useAuth()
+  const { logout } = useLogin()
+  const navigate = useNavigate()
+
+  const onPressLogout = useCallback(() => {
+    logout()
+    navigate('/')
+  }, [logout, navigate])
 
   if (!isAuthorized) {
     return null
@@ -54,6 +62,11 @@ export default function Header() {
         <Link to="/post">
           <button className="flex h-10 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black px-4 text-sm font-bold leading-normal tracking-[0.015em] text-[#FFFFFF]">
             <span className="truncate">게시글 작성</span>
+          </button>
+        </Link>
+        <Link to="/" onClick={onPressLogout}>
+          <button className="flex h-10 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-neutral-500 px-4 text-sm font-bold leading-normal tracking-[0.015em] text-[#FFFFFF]">
+            <span className="truncate">로그아웃</span>
           </button>
         </Link>
       </div>

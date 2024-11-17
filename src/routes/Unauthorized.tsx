@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Unauthorized() {
   return (
@@ -33,12 +34,16 @@ export default function Unauthorized() {
             </p>
             <div className="flex items-center justify-center">
               <div className="flex flex-1 flex-wrap justify-center gap-3 px-4 py-3">
-                <button className="flex h-12 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-[#EEEEEE] px-5 text-base font-bold leading-normal tracking-[0.015em] text-black">
-                  <span className="truncate">로그인</span>
-                </button>
-                <button className="flex h-12 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black px-5 text-base font-bold leading-normal tracking-[0.015em] text-[#FFFFFF]">
-                  <span className="truncate">회원가입</span>
-                </button>
+                <Link to="/login">
+                  <button className="flex h-12 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-[#EEEEEE] px-5 text-base font-bold leading-normal tracking-[0.015em] text-black">
+                    <span className="truncate">로그인</span>
+                  </button>
+                </Link>
+                <Link to="/signup">
+                  <button className="flex h-12 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black px-5 text-base font-bold leading-normal tracking-[0.015em] text-[#FFFFFF]">
+                    <span className="truncate">회원가입</span>
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
