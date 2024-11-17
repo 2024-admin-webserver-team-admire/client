@@ -1,4 +1,4 @@
-import Unauthorized from './401'
+import Unauthorized from './Unauthorized'
 import useAuth from 'hooks/useAuth'
 
 export default function Root() {
