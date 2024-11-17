@@ -1,9 +1,11 @@
 import Header from 'components/Header'
+import useAuth from 'hooks/useAuth'
 import useLogin from 'hooks/useLogin'
 import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
+  const { isAuthorized } = useAuth()
   const { login } = useLogin()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
@@ -17,6 +19,10 @@ export default function Login() {
   const onPressSignup = useCallback(() => {
     navigate('/signup')
   }, [navigate])
+
+  if (isAuthorized) {
+    navigate('/')
+  }
 
   return (
     <div
