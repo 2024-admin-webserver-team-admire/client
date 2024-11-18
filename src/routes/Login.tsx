@@ -28,6 +28,11 @@ export default function Login() {
     <div
       className="group/design-root relative flex size-full min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF]"
       style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onPressLogin()
+        }
+      }}
     >
       <div className="layout-container flex h-full grow flex-col">
         <Header />

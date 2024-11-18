@@ -48,7 +48,7 @@ export default function Header() {
         <div className="flex items-center gap-9">
           <Link
             className="text-sm font-medium leading-normal text-black"
-            to="/board"
+            to="/posts"
           >
             게시판
           </Link>
@@ -59,7 +59,7 @@ export default function Header() {
             마이 페이지
           </Link>
         </div>
-        <Link to="/post">
+        <Link to="/create-post">
           <button className="flex h-10 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black px-4 text-sm font-bold leading-normal tracking-[0.015em] text-[#FFFFFF]">
             <span className="truncate">게시글 작성</span>
           </button>

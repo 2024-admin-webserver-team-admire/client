@@ -1,13 +1,12 @@
 import axios from 'axios'
 import useAuth from './useAuth'
 import { useCallback } from 'react'
-import { useToast } from './useToast'
+import { successToast, errorToast } from './useToast'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 const useLogin = () => {
   const { setUserToken } = useAuth()
-  const { successToast, errorToast } = useToast()
   const login = useCallback(
     async (username: string, password: string) => {
       try {
@@ -24,7 +23,7 @@ const useLogin = () => {
         throw error
       }
     },
-    [setUserToken, successToast, errorToast]
+    [setUserToken]
   )
 
   const logout = useCallback(async () => {

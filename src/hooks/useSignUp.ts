@@ -1,11 +1,10 @@
 import axios from 'axios'
 import { useCallback } from 'react'
-import { useToast } from './useToast'
+import { successToast, errorToast } from './useToast'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 const useSignUp = () => {
-  const { successToast, errorToast } = useToast()
   const signUp = useCallback(
     async (
       username: string,
@@ -29,7 +28,7 @@ const useSignUp = () => {
         throw error
       }
     },
-    [successToast, errorToast]
+    []
   )
 
   return { signUp }

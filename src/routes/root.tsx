@@ -1,3 +1,4 @@
+import Header from 'components/Header'
 import Unauthorized from './Unauthorized'
 import useAuth from 'hooks/useAuth'
 
@@ -10,6 +11,7 @@ export default function Root() {
 
   return (
     <>
+      <Header />
       <div id="sidebar">
         <h1>React Router Contacts</h1>
         <div>
