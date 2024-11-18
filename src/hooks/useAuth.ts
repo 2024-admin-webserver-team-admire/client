@@ -12,7 +12,6 @@ export default function useAuth() {
   useEffect(() => {
     getUserToken().then((token) => {
       setIsAuthorized(token != null && token !== '')
-      console.log(token)
     })
   }, [getUserToken])
 

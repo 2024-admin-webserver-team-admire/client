@@ -1,15 +1,18 @@
 import Header from 'components/Header'
 import moment from 'moment'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import { PostResponse, Post as PostType } from 'types'
 import { IoMdPerson } from 'react-icons/io'
 import { FaCalendar, FaRegCommentAlt } from 'react-icons/fa'
 import { MdModeEdit, MdDelete, MdCancel, MdCheckCircle } from 'react-icons/md'
+import { BiLike, BiSolidLike } from 'react-icons/bi'
 import useDeletePost from 'hooks/useDeletePost'
 import useEditPost from 'hooks/useEditPost'
 import getPost from 'api/getPost'
 import useMyPosts from 'hooks/useMyPosts'
+import useMyLike from 'hooks/useMyLike'
+import useLike from 'hooks/useLike'
 
 const Post = () => {
   const loaderData = useLoaderData() as PostResponse
@@ -18,20 +21,41 @@ const Post = () => {
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
   const [myPosts, setMyPosts] = useState<PostType[]>([])
+  const [myLikePosts, setMyLikePosts] = useState<PostType[]>([])
+  const [myPostsLoaded, setMyPostsLoaded] = useState(false)
+  const [myLikePostsLoaded, setMyLikePostsLoaded] = useState(false)
   const { deletePost } = useDeletePost()
   const { editPost } = useEditPost()
+  const { likePost, dislikePost } = useLike()
   const { fetchMyPosts } = useMyPosts()
+  const { fetchMyLikes } = useMyLike()
   const navigate = useNavigate()
-  const canEdit = myPosts.some((myPost) => myPost.id === post.id)
+  const canEdit = useMemo(
+    () => myPosts.some((myPost) => myPost.id === post.id),
+    [myPosts, post.id]
+  )
+  const canLike = useMemo(
+    () => !myLikePosts.some((myLikePost) => myLikePost.id === post.id),
+    [myLikePosts, post.id]
+  )
 
   useEffect(() => {
     setPost(loaderData)
   }, [loaderData])
   useEffect(() => {
-    fetchMyPosts().then((posts) => {
-      setMyPosts(posts)
-    })
-  }, [fetchMyPosts])
+    if (!myPostsLoaded) {
+      fetchMyPosts().then((posts) => {
+        setMyPosts(posts)
+        setMyPostsLoaded(true)
+      })
+    }
+    if (!myLikePostsLoaded) {
+      fetchMyLikes().then((posts) => {
+        setMyLikePosts(posts)
+        setMyLikePostsLoaded(true)
+      })
+    }
+  }, [fetchMyPosts, fetchMyLikes, myPostsLoaded, myLikePostsLoaded])
 
   const onPressEdit = () => {
     setIsEditing(true)
@@ -49,6 +73,40 @@ const Post = () => {
     await deletePost(`${post.id}`)
     navigate('/posts')
   }
+  const onPressLike = async () => {
+    if (canLike) {
+      setMyLikePosts((prev) => [...prev, post])
+      setPost((prev) => ({
+        ...prev,
+        likeCount: prev.likeCount + 1
+      }))
+      try {
+        await likePost(`${post.id}`)
+      } catch (error) {
+        setMyLikePosts((prev) => prev.filter((p) => p.id !== post.id))
+        setPost((prev) => ({
+          ...prev,
+          likeCount: prev.likeCount - 1
+        }))
+      }
+    } else {
+      setMyLikePosts((prev) => prev.filter((p) => p.id !== post.id))
+      setPost((prev) => ({
+        ...prev,
+        likeCount: prev.likeCount - 1
+      }))
+      try {
+        await dislikePost(`${post.id}`)
+      } catch (error) {
+        setMyLikePosts((prev) => [...prev, post])
+        setPost((prev) => ({
+          ...prev,
+          likeCount: prev.likeCount + 1
+        }))
+      }
+    }
+  }
+
   return (
     <div
       className="group/design-root relative flex size-full min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF]"
@@ -184,29 +242,24 @@ const Post = () => {
                     : `${post.viewCount} view`}
                 </p>
               </div>
-              <div className="flex items-center justify-center gap-2 px-3 py-2">
+              <button
+                className="flex items-center justify-center gap-2 px-3 py-2"
+                onClick={onPressLike}
+              >
                 <div
                   className="text-[#3E4D5B]"
                   data-icon="ThumbsUp"
                   data-size="24px"
                   data-weight="regular"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24px"
-                    height="24px"
-                    fill="currentColor"
-                    viewBox="0 0 256 256"
-                  >
-                    <path d="M234,80.12A24,24,0,0,0,216,72H160V56a40,40,0,0,0-40-40,8,8,0,0,0-7.16,4.42L75.06,96H32a16,16,0,0,0-16,16v88a16,16,0,0,0,16,16H204a24,24,0,0,0,23.82-21l12-96A24,24,0,0,0,234,80.12ZM32,112H72v88H32ZM223.94,97l-12,96a8,8,0,0,1-7.94,7H88V105.89l36.71-73.43A24,24,0,0,1,144,56V80a8,8,0,0,0,8,8h64a8,8,0,0,1,7.94,9Z"></path>
-                  </svg>
+                  {canLike ? <BiLike size={24} /> : <BiSolidLike size={24} />}
                 </div>
                 <p className="text-[13px] font-bold leading-normal tracking-[0.015em] text-[#3E4D5B]">
                   {post.likeCount > 1
                     ? `${post.likeCount} likes`
                     : `${post.likeCount} like`}
                 </p>
-              </div>
+              </button>
               <div className="flex items-center justify-center gap-2 px-3 py-2">
                 <div
                   className="text-[#3E4D5B]"
