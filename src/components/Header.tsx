@@ -19,7 +19,7 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#EEEEEE] px-10 py-3">
-      <div className="flex items-center gap-4 text-black">
+      <Link to="/" className="flex items-center gap-4 text-black">
         <div className="size-4">
           <svg
             viewBox="0 0 48 48"
@@ -40,10 +40,10 @@ export default function Header() {
             ></path>
           </svg>
         </div>
-        <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] text-black">
+        <h1 className="text-lg font-bold leading-tight tracking-[-0.015em] text-black">
           동경
-        </h2>
-      </div>
+        </h1>
+      </Link>
       <div className="flex flex-1 justify-end gap-8">
         <div className="flex items-center gap-9">
           <Link
