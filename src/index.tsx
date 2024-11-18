@@ -8,6 +8,10 @@ import SignUp from 'routes/SignUp'
 import 'tailwindcss/tailwind.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
+import CreatePost from 'routes/CreatePost'
+import Posts from 'routes/Posts'
+import Post from 'routes/Post'
+import getPost from 'api/getPost'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +26,19 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignUp />
+  },
+  {
+    path: '/create-post',
+    element: <CreatePost />
+  },
+  {
+    path: '/posts',
+    element: <Posts />
+  },
+  {
+    path: '/posts/:postId',
+    element: <Post />,
+    loader: ({ params }) => getPost(params.postId)
   }
 ])
 

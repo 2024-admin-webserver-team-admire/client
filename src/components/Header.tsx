@@ -19,7 +19,7 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#EEEEEE] px-10 py-3">
-      <div className="flex items-center gap-4 text-black">
+      <Link to="/" className="flex items-center gap-4 text-black">
         <div className="size-4">
           <svg
             viewBox="0 0 48 48"
@@ -40,15 +40,15 @@ export default function Header() {
             ></path>
           </svg>
         </div>
-        <h2 className="text-lg font-bold leading-tight tracking-[-0.015em] text-black">
+        <h1 className="text-lg font-bold leading-tight tracking-[-0.015em] text-black">
           동경
-        </h2>
-      </div>
+        </h1>
+      </Link>
       <div className="flex flex-1 justify-end gap-8">
         <div className="flex items-center gap-9">
           <Link
             className="text-sm font-medium leading-normal text-black"
-            to="/board"
+            to="/posts"
           >
             게시판
           </Link>
@@ -59,7 +59,7 @@ export default function Header() {
             마이 페이지
           </Link>
         </div>
-        <Link to="/post">
+        <Link to="/create-post">
           <button className="flex h-10 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl bg-black px-4 text-sm font-bold leading-normal tracking-[0.015em] text-[#FFFFFF]">
             <span className="truncate">게시글 작성</span>
           </button>

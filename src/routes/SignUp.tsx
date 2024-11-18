@@ -1,7 +1,7 @@
 import Header from 'components/Header'
 import useAuth from 'hooks/useAuth'
 import useSignUp from 'hooks/useSignUp'
-import { useToast } from 'hooks/useToast'
+import { errorToast } from 'hooks/useToast'
 import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -14,7 +14,6 @@ export default function SignUp() {
   const [password, setPassword] = useState('')
 
   const { signUp } = useSignUp()
-  const { errorToast } = useToast()
   const navigate = useNavigate()
   const onPressSignUp = useCallback(async () => {
     if (email === '') {
@@ -43,7 +42,7 @@ export default function SignUp() {
     }
     await signUp(username, password, nickname, birth, email)
     navigate('/login')
-  }, [email, username, nickname, birth, password, signUp, navigate, errorToast])
+  }, [email, username, nickname, birth, password, signUp, navigate])
 
   if (isAuthorized) {
     navigate('/')
