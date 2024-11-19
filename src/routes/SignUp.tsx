@@ -1,7 +1,7 @@
 import Header from 'components/Header'
 import useAuth from 'hooks/useAuth'
 import useSignUp from 'hooks/useSignUp'
-import { errorToast } from 'hooks/useToast'
+import { errorToast } from 'module/toast'
 import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -52,6 +52,11 @@ export default function SignUp() {
     <div
       className="group/design-root relative flex size-full min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF]"
       style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onPressSignUp()
+        }
+      }}
     >
       <div className="layout-container flex h-full grow flex-col">
         <Header />
@@ -90,6 +95,7 @@ export default function SignUp() {
               <label className="flex min-w-40 flex-1 flex-col">
                 <input
                   placeholder="생년월일 (YYYY-MM-DD)"
+                  type="text"
                   className="flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                   value={birth}
                   onChange={(e) => setBirth(e.target.value)}

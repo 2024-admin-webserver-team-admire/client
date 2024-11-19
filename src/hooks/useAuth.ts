@@ -1,19 +1,24 @@
 import { useCallback, useEffect, useState } from 'react'
-import useLocalForage from './useLocalForage'
+import { get, set } from '../module/localForage'
 
 export default function useAuth() {
-  const { get, set } = useLocalForage()
   const [isAuthorized, setIsAuthorized] = useState(true)
-  const getUserToken = useCallback(() => get('userToken'), [get])
+  const getUserToken = useCallback(() => get('userToken'), [])
   const setUserToken = useCallback(
     (token: string) => set('userToken', token),
-    [set]
+    []
   )
+
   useEffect(() => {
     getUserToken().then((token) => {
+      console.log(token)
       setIsAuthorized(token != null && token !== '')
     })
   }, [getUserToken])
 
-  return { getUserToken, setUserToken, isAuthorized }
+  return {
+    getUserToken,
+    setUserToken,
+    isAuthorized
+  }
 }

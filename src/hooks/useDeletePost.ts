@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useCallback } from 'react'
 import useAuth from './useAuth'
-import { successToast, errorToast } from './useToast'
+import { successToast, errorToast } from '../module/toast'
 
 const API_URL = import.meta.env.VITE_API_URL
 

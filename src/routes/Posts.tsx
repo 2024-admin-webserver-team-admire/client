@@ -6,6 +6,7 @@ import useGetPosts from 'hooks/useGetPosts'
 import { Post } from 'types'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
+import ProfileImage from 'components/ProfileImage'
 
 export default function Posts() {
   const [isLoading, setIsLoading] = useState(false)
@@ -96,11 +97,7 @@ export default function Posts() {
                       >
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-4">
-                            <div className="relative inline-flex size-10 items-center justify-center overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600">
-                              <span className="font-medium text-gray-600 dark:text-gray-300">
-                                {post.writer.name.slice(0, 2)}
-                              </span>
-                            </div>
+                            <ProfileImage name={post.writer.name} />
                             <div className="font-medium dark:text-black">
                               <div>Writer</div>
                               <div className="text-sm text-gray-500 dark:text-gray-400">
