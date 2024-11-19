@@ -2,17 +2,23 @@ import Header from 'components/Header'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
-import { PostResponse, Post as PostType } from 'types'
+import { PostResponse, Post as PostType, Comment } from 'types'
 import { IoMdPerson } from 'react-icons/io'
 import { FaCalendar, FaRegCommentAlt } from 'react-icons/fa'
 import { MdModeEdit, MdDelete, MdCancel, MdCheckCircle } from 'react-icons/md'
 import { BiLike, BiSolidLike } from 'react-icons/bi'
+import { IoSend } from 'react-icons/io5'
 import useDeletePost from 'hooks/useDeletePost'
 import useEditPost from 'hooks/useEditPost'
 import getPost from 'api/getPost'
 import useMyPosts from 'hooks/useMyPosts'
 import useMyLike from 'hooks/useMyLike'
 import useLike from 'hooks/useLike'
+import ProfileImage from 'components/ProfileImage'
+import useMyComments from 'hooks/useMyComments'
+import useDeleteComment from 'hooks/useDeleteComment'
+import useCreateComment from 'hooks/useCreateComment'
+import useEditComment from 'hooks/useEditComment'
 
 const Post = () => {
   const loaderData = useLoaderData() as PostResponse
@@ -20,23 +26,34 @@ const Post = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState(post.title)
   const [content, setContent] = useState(post.content)
+  const [commentContent, setCommentContent] = useState('')
   const [myPosts, setMyPosts] = useState<PostType[]>([])
   const [myLikePosts, setMyLikePosts] = useState<PostType[]>([])
+  const [myComments, setMyComments] = useState<Comment[]>([])
   const [myPostsLoaded, setMyPostsLoaded] = useState(false)
   const [myLikePostsLoaded, setMyLikePostsLoaded] = useState(false)
+  const [myCommentsLoaded, setMyCommentsLoaded] = useState(false)
   const { deletePost } = useDeletePost()
   const { editPost } = useEditPost()
   const { likePost, dislikePost } = useLike()
+  const { createComment } = useCreateComment()
+  const { editComment } = useEditComment()
+  const { deleteComment } = useDeleteComment()
   const { fetchMyPosts } = useMyPosts()
   const { fetchMyLikes } = useMyLike()
+  const { fetchMyComments } = useMyComments()
   const navigate = useNavigate()
-  const canEdit = useMemo(
+  const canEditPost = useMemo(
     () => myPosts.some((myPost) => myPost.id === post.id),
     [myPosts, post.id]
   )
   const canLike = useMemo(
     () => !myLikePosts.some((myLikePost) => myLikePost.id === post.id),
     [myLikePosts, post.id]
+  )
+  const canEditComment = useMemo(
+    () => !myComments.some((myComment) => myComment.id === post.id),
+    [myComments, post.id]
   )
 
   useEffect(() => {
@@ -55,7 +72,20 @@ const Post = () => {
         setMyLikePostsLoaded(true)
       })
     }
-  }, [fetchMyPosts, fetchMyLikes, myPostsLoaded, myLikePostsLoaded])
+    if (!myCommentsLoaded) {
+      fetchMyComments().then((comments) => {
+        setMyComments(comments)
+        setMyCommentsLoaded(true)
+      })
+    }
+  }, [
+    fetchMyPosts,
+    fetchMyLikes,
+    fetchMyComments,
+    myPostsLoaded,
+    myLikePostsLoaded,
+    myCommentsLoaded
+  ])
 
   const onPressEdit = () => {
     setIsEditing(true)
@@ -106,6 +136,41 @@ const Post = () => {
       }
     }
   }
+  const onPressCreateComment = async (content: string) => {
+    const commentId = await createComment(`${post.id}`, content)
+    const comment = {
+      id: commentId,
+      content,
+      writer: post.writer,
+      createdDate: new Date()
+    }
+    setMyComments((prev) => [...prev, comment])
+    setPost((prev) => ({
+      ...prev,
+      commentCount: prev.commentCount + 1,
+      comments: [...prev.comments, comment]
+    }))
+  }
+  const onPressEditComment = async (commentId: string, content: string) => {
+    await editComment(commentId, content)
+    setPost((prev) => ({
+      ...prev,
+      comments: prev.comments.map((comment) =>
+        `${comment.id}` === commentId ? { ...comment, content } : comment
+      )
+    }))
+  }
+  const onPressDeleteComment = async (commentId: string) => {
+    await deleteComment(commentId)
+    setPost((prev) => ({
+      ...prev,
+      commentCount: prev.commentCount - 1,
+      comments: prev.comments.filter((comment) => `${comment.id}` !== commentId)
+    }))
+    setMyComments((prev) =>
+      prev.filter((comment) => `${comment.id}` !== commentId)
+    )
+  }
 
   return (
     <div
@@ -130,7 +195,7 @@ const Post = () => {
                   </p>
                 </div>
               </div>
-              {canEdit &&
+              {canEditPost &&
                 (isEditing ? (
                   <div className="flex flex-wrap gap-3 self-end">
                     <button
@@ -275,6 +340,63 @@ const Post = () => {
                     : `${post.commentCount} comment`}
                 </p>
               </div>
+            </div>
+            <h2 className="px-4 pb-3 pt-5 text-[22px] font-bold leading-tight tracking-[-0.015em] text-black">
+              Preview of Comments
+            </h2>
+            {post.comments.map((comment) => {
+              return (
+                <div className="flex gap-3 p-4" key={comment.id}>
+                  <ProfileImage name={comment.writer.name} />
+                  <div className="flex flex-1 flex-col items-stretch gap-2">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <p className="text-base font-bold leading-tight text-black">
+                          {comment.writer.name}
+                        </p>
+                        <p className="text-sm font-normal leading-normal text-[#6B6B6B]">
+                          {moment(comment.createdDate).fromNow()}
+                        </p>
+                      </div>
+                      <p className="text-base font-normal leading-normal text-black">
+                        {comment.content}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+            <div className="flex items-center gap-3 px-4 py-3">
+              <ProfileImage name={post.writer.name} />
+              <label className="flex h-12 min-w-40 flex-1 flex-col">
+                <div className="flex size-full flex-1 items-stretch rounded-xl">
+                  <input
+                    placeholder="Add a comment..."
+                    className="form-input flex size-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl rounded-r-none border-r-0 border-none bg-[#EEEEEE] px-4 pr-2 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                    value={commentContent}
+                    onChange={(e) => setCommentContent(e.target.value)}
+                  />
+                  <div className="flex items-center justify-center rounded-r-xl border-l-0 border-none bg-[#EEEEEE] !pr-2">
+                    <div className="flex items-center justify-end gap-4">
+                      <div className="flex items-center gap-1">
+                        <button
+                          className="flex items-center justify-center p-1.5"
+                          onClick={() => onPressCreateComment(commentContent)}
+                        >
+                          <div
+                            className="text-[#6B6B6B]"
+                            data-icon="Smiley"
+                            data-size="20px"
+                            data-weight="regular"
+                          >
+                            <IoSend />
+                          </div>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </label>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import Header from 'components/Header'
 import useAuth from 'hooks/useAuth'
 import useSignUp from 'hooks/useSignUp'
-import { errorToast } from 'hooks/useToast'
+import { errorToast } from 'module/toast'
 import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

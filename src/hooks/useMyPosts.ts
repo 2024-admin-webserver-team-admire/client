@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useCallback } from 'react'
 import useAuth from './useAuth'
-import { errorToast } from './useToast'
 import { Post } from 'types'
 
 const API_URL = import.meta.env.VITE_API_URL
@@ -17,11 +16,9 @@ const useMyPosts = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log(response.data)
       return response.data as Post[]
     } catch (error) {
       console.error('Failed to fetch my posts:', error)
-      errorToast('내 포스트 불러오기 실패')
       throw error
     }
   }, [getUserToken])
