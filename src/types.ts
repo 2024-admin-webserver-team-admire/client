@@ -18,6 +18,10 @@ export interface PostResponse extends Post {
   comments: Comment[]
 }
 
+export interface MyCommentResponse extends Post {
+  comments: Comment
+}
+
 export interface Comment {
   id: number
   content: string
@@ -26,7 +30,7 @@ export interface Comment {
 }
 
 export interface CommentsResponse {
-  comments: Comment[]
+  comments: Comment
   postResponse: Post
 }
 

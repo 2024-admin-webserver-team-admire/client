@@ -54,7 +54,7 @@ export default function Header() {
           </Link>
           <Link
             className="text-sm font-medium leading-normal text-black"
-            to="/following"
+            to="/mypage"
           >
             마이 페이지
           </Link>

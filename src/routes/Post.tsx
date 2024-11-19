@@ -2,7 +2,7 @@ import Header from 'components/Header'
 import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
-import { PostResponse, Post as PostType } from 'types'
+import { MyCommentResponse, PostResponse, Post as PostType } from 'types'
 import { IoMdPerson } from 'react-icons/io'
 import { FaCalendar, FaRegCommentAlt } from 'react-icons/fa'
 import { MdModeEdit, MdDelete, MdCancel, MdCheckCircle } from 'react-icons/md'
@@ -19,6 +19,8 @@ import useMyComments from 'hooks/useMyComments'
 import useDeleteComment from 'hooks/useDeleteComment'
 import useCreateComment from 'hooks/useCreateComment'
 import useEditComment from 'hooks/useEditComment'
+import Unauthorized from './Unauthorized'
+import useAuth from 'hooks/useAuth'
 
 const Post = () => {
   const loaderData = useLoaderData() as PostResponse
@@ -32,19 +34,17 @@ const Post = () => {
   const [commentContent, setCommentContent] = useState('')
   const [myPosts, setMyPosts] = useState<PostType[]>([])
   const [myLikePosts, setMyLikePosts] = useState<PostType[]>([])
-  const [myComments, setMyComments] = useState<PostResponse[]>([])
-  const [myPostsLoaded, setMyPostsLoaded] = useState(false)
-  const [myLikePostsLoaded, setMyLikePostsLoaded] = useState(false)
-  const [myCommentsLoaded, setMyCommentsLoaded] = useState(false)
+  const [myComments, setMyComments] = useState<MyCommentResponse[]>([])
   const { deletePost } = useDeletePost()
   const { editPost } = useEditPost()
   const { likePost, dislikePost } = useLike()
   const { createComment } = useCreateComment()
   const { editComment } = useEditComment()
   const { deleteComment } = useDeleteComment()
-  const { fetchMyPosts } = useMyPosts()
-  const { fetchMyLikes } = useMyLike()
-  const { fetchMyComments } = useMyComments()
+  const { fetchMyPosts, isLoaded: myPostsLoaded } = useMyPosts()
+  const { fetchMyLikes, isLoaded: myLikePostsLoaded } = useMyLike()
+  const { fetchMyComments, isLoaded: myCommentsLoaded } = useMyComments()
+  const { isAuthorized } = useAuth()
   const navigate = useNavigate()
   const canEditPost = useMemo(
     () => myPosts.some((myPost) => myPost.id === post.id),
@@ -56,9 +56,7 @@ const Post = () => {
   )
   const getCanEditComment = useCallback(
     (commentId: number) => {
-      console.log('$$$$$$$')
-      console.log(myComments)
-      return !myComments.some((myComment) => myComment.id === commentId)
+      return myComments.some((myComment) => myComment.comments.id === commentId)
     },
     [myComments]
   )
@@ -70,19 +68,16 @@ const Post = () => {
     if (!myPostsLoaded) {
       fetchMyPosts().then((posts) => {
         setMyPosts(posts)
-        setMyPostsLoaded(true)
       })
     }
     if (!myLikePostsLoaded) {
       fetchMyLikes().then((posts) => {
         setMyLikePosts(posts)
-        setMyLikePostsLoaded(true)
       })
     }
     if (!myCommentsLoaded) {
       fetchMyComments().then((comments) => {
         setMyComments(comments)
-        setMyCommentsLoaded(true)
       })
     }
   }, [
@@ -158,7 +153,7 @@ const Post = () => {
       ...prev,
       {
         ...post,
-        comments: [comment]
+        comments: comment
       }
     ])
     setPost((prev) => ({
@@ -201,6 +196,10 @@ const Post = () => {
     setMyComments((prev) =>
       prev.filter((comment) => `${comment.id}` !== commentId)
     )
+  }
+
+  if (!isAuthorized) {
+    return <Unauthorized />
   }
 
   return (
