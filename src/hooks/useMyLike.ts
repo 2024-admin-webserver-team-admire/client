@@ -1,10 +1,13 @@
 import axios from 'axios'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import useAuth from './useAuth'
+import { Post } from 'types'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 const useMyLike = () => {
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [myLikePosts, setMyLikePosts] = useState<Post[]>([])
   const { getUserToken } = useAuth()
   const fetchMyLikes = useCallback(async () => {
     const token = await getUserToken()
@@ -14,15 +17,16 @@ const useMyLike = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      console.log(response.data)
-      return response.data
+      setIsLoaded(true)
+      setMyLikePosts(response.data)
+      return response.data as Post[]
     } catch (error) {
       console.error('Failed to fetch liked posts:', error)
       throw error
     }
   }, [getUserToken])
 
-  return { fetchMyLikes }
+  return { fetchMyLikes, isLoaded, myLikePosts }
 }
 
 export default useMyLike

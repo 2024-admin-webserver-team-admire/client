@@ -12,6 +12,7 @@ import CreatePost from 'routes/CreatePost'
 import Posts from 'routes/Posts'
 import Post from 'routes/Post'
 import getPost from 'api/getPost'
+import { MyPage } from 'routes/MyPage'
 
 const router = createBrowserRouter([
   {
@@ -38,7 +39,13 @@ const router = createBrowserRouter([
   {
     path: '/posts/:postId',
     element: <Post />,
-    loader: ({ params }) => getPost(params.postId)
+    loader: ({ params }) => {
+      return getPost(params.postId)
+    }
+  },
+  {
+    path: '/mypage',
+    element: <MyPage />
   }
 ])
 
