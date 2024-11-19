@@ -1,21 +1,20 @@
 import axios from 'axios'
 import { useCallback } from 'react'
 import useAuth from './useAuth'
-import { successToast, errorToast } from '../module/toast'
 
 const API_URL = import.meta.env.VITE_API_URL
 
-const useCreatePost = () => {
+const useCreateComment = () => {
   const { getUserToken } = useAuth()
-  const createPost = useCallback(
-    async (title: string, content: string) => {
+  const createComment = useCallback(
+    async (postId: string, content: string) => {
       const token = await getUserToken()
       console.log(token)
       try {
         const response = await axios.post(
-          `${API_URL}/posts`,
+          `${API_URL}/comments`,
           {
-            title,
+            postId,
             content
           },
           {
@@ -24,18 +23,16 @@ const useCreatePost = () => {
             }
           }
         )
-        console.log(response.data)
-        successToast('포스트 생성 성공')
+        return response.data as number
       } catch (error) {
-        console.error('Post creation failed:', error)
-        errorToast('포스트 생성 실패')
+        console.error('Comment creation failed:', error)
         throw error
       }
     },
     [getUserToken]
   )
 
-  return { createPost }
+  return { createComment }
 }
 
-export default useCreatePost
+export default useCreateComment
