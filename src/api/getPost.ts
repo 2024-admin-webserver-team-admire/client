@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { get, set } from 'module/localForage'
 import { errorToast } from 'module/toast'
-import { CommentsResponse, Post, PostResponse } from 'types'
+import { Post, PostResponse } from 'types'
 
 const API_URL = import.meta.env.VITE_API_URL
 
@@ -19,9 +19,9 @@ const getPost = async (postId?: string): Promise<PostResponse> => {
         }
       }
     )
-    const comments = commentsResponse.data as CommentsResponse
+    const comments = commentsResponse.data as PostResponse
     console.log('COOKIE')
-    console.log(commentsResponse.headers)
+    console.log(comments)
     console.log(commentsResponse.headers)
     console.log(commentsResponse.headers['Viewedposts'])
     await set(
