@@ -26,11 +26,11 @@ export default function CreatePost() {
       style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
     >
       <Header />
-      <div className="layout-container flex h-full grow flex-col">
+      <div className="  flex h-full grow flex-col">
         <div className="flex flex-1 justify-center px-40 py-5">
           <div className="flex w-[512px] max-w-[512px] flex-1 flex-col py-5">
             <div className="flex flex-wrap justify-between gap-3 p-4">
-              <p className="tracking-light min-w-72 text-[32px] font-bold leading-tight text-black">
+              <p className="  min-w-72 text-[32px] font-bold leading-tight text-black">
                 New post
               </p>
             </div>
@@ -38,7 +38,7 @@ export default function CreatePost() {
               <label className="flex min-w-40 flex-1 flex-col">
                 <input
                   placeholder="Title"
-                  className="form-input flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                  className="  flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
@@ -48,7 +48,7 @@ export default function CreatePost() {
               <label className="flex min-w-40 flex-1 flex-col">
                 <textarea
                   placeholder="Write your post..."
-                  className="form-input flex min-h-36 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                  className="  flex min-h-36 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                 ></textarea>

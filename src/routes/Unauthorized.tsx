@@ -9,10 +9,10 @@ export default function Unauthorized() {
         fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif;'
       }}
     >
-      <div className="layout-container flex h-full grow flex-col">
+      <div className="flex h-full grow flex-col">
         <div className="flex flex-1 justify-center px-40 py-5">
           <div className="flex w-[512px] max-w-[960px] flex-1 flex-col py-5">
-            <div className="@container">
+            <div>
               <div className="@[480px]:px-4 @[480px]:py-3">
                 <div
                   className="@[480px]:rounded-xl flex min-h-[400px] w-full flex-col justify-end overflow-hidden bg-[#FFFFFF] bg-cover bg-center bg-no-repeat"

@@ -15,9 +15,15 @@ export default function useAuth() {
     })
   }, [getUserToken])
 
+  const revokeUserAuth = useCallback(() => {
+    setUserToken('')
+    setIsAuthorized(false)
+  }, [setUserToken])
+
   return {
     getUserToken,
     setUserToken,
-    isAuthorized
+    isAuthorized,
+    revokeUserAuth
   }
 }

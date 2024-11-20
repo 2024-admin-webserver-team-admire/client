@@ -2,11 +2,12 @@ import axios from 'axios'
 import useAuth from './useAuth'
 import { useCallback } from 'react'
 import { successToast, errorToast } from '../module/toast'
+import { set } from 'module/localForage'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 const useLogin = () => {
-  const { setUserToken } = useAuth()
+  const { setUserToken, revokeUserAuth } = useAuth()
   const login = useCallback(
     async (username: string, password: string) => {
       try {
@@ -27,9 +28,10 @@ const useLogin = () => {
   )
 
   const logout = useCallback(async () => {
-    setUserToken('')
+    revokeUserAuth()
+    await set(`userViewedPosts`, null)
     successToast('로그아웃 성공')
-  }, [setUserToken, successToast])
+  }, [revokeUserAuth])
 
   return { login, logout }
 }

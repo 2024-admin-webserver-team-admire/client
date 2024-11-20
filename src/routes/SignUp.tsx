@@ -36,6 +36,10 @@ export default function SignUp() {
       errorToast('비밀번호를 입력해주세요.')
       return
     }
+    if (email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) === null) {
+      errorToast('이메일 형식이 올바르지 않습니다.')
+      return
+    }
     if (birth.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
       errorToast('생년월일 형식이 올바르지 않습니다.')
       return
@@ -58,10 +62,10 @@ export default function SignUp() {
         }
       }}
     >
-      <div className="layout-container flex h-full grow flex-col">
+      <div className="flex h-full grow flex-col">
         <Header />
         <div className="flex flex-1 justify-center px-40 py-5">
-          <div className="layout-content-container flex w-[512px] max-w-[512px] flex-1 flex-col py-5">
+          <div className="flex w-[512px] max-w-[512px] flex-1 flex-col py-5">
             <h1 className="px-4 pb-3 pt-5 text-center text-[22px] font-bold leading-tight tracking-[-0.015em] text-black">
               동경 게시판에 오신 것을 환영합니다.
             </h1>

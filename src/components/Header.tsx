@@ -11,6 +11,7 @@ export default function Header() {
   const onPressLogout = useCallback(() => {
     logout()
     navigate('/')
+    navigate(0)
   }, [logout, navigate])
 
   if (!isAuthorized) {

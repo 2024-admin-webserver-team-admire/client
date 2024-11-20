@@ -21,6 +21,7 @@ import useCreateComment from 'hooks/useCreateComment'
 import useEditComment from 'hooks/useEditComment'
 import Unauthorized from './Unauthorized'
 import useAuth from 'hooks/useAuth'
+import useMe from 'hooks/useMe'
 
 const Post = () => {
   const loaderData = useLoaderData() as PostResponse
@@ -35,6 +36,7 @@ const Post = () => {
   const [myPosts, setMyPosts] = useState<PostType[]>([])
   const [myLikePosts, setMyLikePosts] = useState<PostType[]>([])
   const [myComments, setMyComments] = useState<MyCommentResponse[]>([])
+  const { userData } = useMe()
   const { deletePost } = useDeletePost()
   const { editPost } = useEditPost()
   const { likePost, dislikePost } = useLike()
@@ -139,14 +141,14 @@ const Post = () => {
     }
   }
   const onPressCreateComment = async () => {
-    if (commentContent === '') {
+    if (commentContent === '' || !userData) {
       return
     }
     const commentId = await createComment(`${post.id}`, commentContent)
     const comment = {
       id: commentId,
       content: commentContent,
-      writer: post.writer,
+      writer: userData,
       createdDate: new Date()
     }
     setMyComments((prev) => [
@@ -207,10 +209,10 @@ const Post = () => {
       className="group/design-root relative flex size-full min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF]"
       style={{ fontFamily: '"Public Sans", "Noto Sans", sans-serif' }}
     >
-      <div className="layout-container flex h-full grow flex-col">
+      <div className="  flex h-full grow flex-col">
         <Header />
         <div className="flex flex-1 justify-center px-40 py-5">
-          <div className="layout-content-container flex max-w-[960px] flex-1 flex-col">
+          <div className=" flex max-w-[960px] flex-1 flex-col">
             <div className="flex flex-wrap gap-3 p-3 pr-4">
               <div className="flex grow flex-wrap gap-3 self-start">
                 <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-[#F0F2F5] px-4">
@@ -276,7 +278,7 @@ const Post = () => {
                         <label className="flex min-w-40 flex-1 flex-col">
                           <input
                             placeholder="Title"
-                            className="form-input flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                            className=" flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                           />
@@ -286,7 +288,7 @@ const Post = () => {
                         <label className="flex min-w-40 flex-1 flex-col">
                           <textarea
                             placeholder="Write your post..."
-                            className="form-input flex min-h-36 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                            className=" flex min-h-36 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                           ></textarea>
@@ -393,7 +395,7 @@ const Post = () => {
                           <label className="flex min-w-40 flex-1 flex-col">
                             <input
                               placeholder="Edit comment"
-                              className="form-input flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                              className=" flex h-14 w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl border-none bg-[#EEEEEE] p-4 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                               value={editCommentContent}
                               onChange={(e) =>
                                 setEditCommentContent(e.target.value)
@@ -460,12 +462,12 @@ const Post = () => {
                 }
               }}
             >
-              <ProfileImage name={post.writer.name} />
+              <ProfileImage name={userData?.name ?? post.writer.name} />
               <label className="flex h-12 min-w-40 flex-1 flex-col">
                 <div className="flex size-full flex-1 items-stretch rounded-xl">
                   <input
                     placeholder="Add a comment..."
-                    className="form-input flex size-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl rounded-r-none border-r-0 border-none bg-[#EEEEEE] px-4 pr-2 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
+                    className=" flex size-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl rounded-r-none border-r-0 border-none bg-[#EEEEEE] px-4 pr-2 text-base font-normal leading-normal text-black placeholder:text-[#6B6B6B] focus:border-none focus:outline-0 focus:ring-0"
                     value={commentContent}
                     onChange={(e) => setCommentContent(e.target.value)}
                   />

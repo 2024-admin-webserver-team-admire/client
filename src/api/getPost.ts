@@ -1,33 +1,26 @@
 import axios from 'axios'
 import { get, set } from 'module/localForage'
 import { errorToast } from 'module/toast'
-import { CommentsResponse, Post, PostResponse } from 'types'
+import { Post, PostResponse } from 'types'
 
 const API_URL = import.meta.env.VITE_API_URL
 
 const getPost = async (postId?: string): Promise<PostResponse> => {
   try {
-    const postResponse = await axios.get(`${API_URL}/posts/${postId}`)
-    const post = postResponse.data as Post
-    const cookie = await get(`userViewedPosts/${postId}`)
-    console.log(cookie)
-    const commentsResponse = await axios.get(
-      `${API_URL}/comments/posts/${postId}`,
-      {
-        headers: {
-          Viewedposts: cookie
-        }
+    const cookie = await get(`userViewedPosts`)
+    const postResponse = await axios.get(`${API_URL}/posts/${postId}`, {
+      headers: {
+        Viewedposts: cookie
       }
+    })
+    const post = postResponse.data as Post
+    const commentsResponse = await axios.get(
+      `${API_URL}/comments/posts/${postId}`
     )
-    const comments = commentsResponse.data as CommentsResponse
-    console.log('COOKIE')
-    console.log(commentsResponse.headers)
-    console.log(commentsResponse.headers)
-    console.log(commentsResponse.headers['Viewedposts'])
-    await set(
-      `userViewedPosts/${postId}`,
-      commentsResponse.headers['Viewedposts']
-    )
+    const comments = commentsResponse.data as PostResponse
+    if (postResponse.headers['viewedposts']) {
+      await set(`userViewedPosts`, postResponse.headers['viewedposts'])
+    }
     return { ...post, comments: comments.comments }
   } catch (error) {
     console.error('Failed to fetch post:', error)
