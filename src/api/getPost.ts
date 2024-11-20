@@ -7,27 +7,23 @@ const API_URL = import.meta.env.VITE_API_URL
 
 const getPost = async (postId?: string): Promise<PostResponse> => {
   try {
-    const postResponse = await axios.get(`${API_URL}/posts/${postId}`)
-    const post = postResponse.data as Post
     const cookie = await get(`userViewedPosts/${postId}`)
-    console.log(cookie)
-    const commentsResponse = await axios.get(
-      `${API_URL}/comments/posts/${postId}`,
-      {
-        headers: {
-          Viewedposts: cookie
-        }
+    const postResponse = await axios.get(`${API_URL}/posts/${postId}`, {
+      headers: {
+        Viewedposts: cookie
       }
+    })
+    const post = postResponse.data as Post
+    const commentsResponse = await axios.get(
+      `${API_URL}/comments/posts/${postId}`
     )
     const comments = commentsResponse.data as PostResponse
-    console.log('COOKIE')
-    console.log(comments)
-    console.log(commentsResponse.headers)
-    console.log(commentsResponse.headers['Viewedposts'])
-    await set(
-      `userViewedPosts/${postId}`,
-      commentsResponse.headers['Viewedposts']
-    )
+    if (postResponse.headers['viewedposts']) {
+      await set(
+        `userViewedPosts/${postId}`,
+        postResponse.headers['viewedposts']
+      )
+    }
     return { ...post, comments: comments.comments }
   } catch (error) {
     console.error('Failed to fetch post:', error)
