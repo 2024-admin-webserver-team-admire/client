@@ -21,9 +21,9 @@ export default function Root() {
         className="group/design-root relative flex size-full min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF]"
         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
       >
-        <div className="layout-container flex h-full grow flex-col">
+        <div className="flex h-full grow flex-col">
           <div className="flex flex-1 justify-center px-40 py-5">
-            <div className="layout-content-container flex max-w-[960px] flex-1 flex-col">
+            <div className="flex max-w-[960px] flex-1 flex-col">
               <div className="flex flex-col px-4 py-6">
                 <div className="flex flex-col items-center gap-6">
                   <div

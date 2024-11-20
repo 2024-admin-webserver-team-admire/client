@@ -45,80 +45,82 @@ export const MyPage = () => {
   return (
     <>
       <Header />
-      <h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-black">
-        Likes
-      </h3>
-      {myLikePosts.map((post) => {
-        return (
-          <Link
-            key={post.id}
-            to={`/posts/${post.id}`}
-            className="flex items-center justify-between gap-4 bg-[#FFFFFF] px-4 py-3"
-          >
-            <div className="flex items-center gap-4">
-              <ProfileImage name={post.writer.name} />
-              <div className="flex flex-col justify-center">
-                <p className="line-clamp-1 text-base font-medium leading-normal text-black">
-                  {post.title}
-                </p>
-                <p className="line-clamp-2 text-sm font-normal leading-normal text-[#6B6B6B]">
-                  {post.writer.name} • {moment(post.createdDate).fromNow()}
-                </p>
+      <div className="px-40 py-5">
+        <h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-black">
+          Likes
+        </h3>
+        {myLikePosts.map((post) => {
+          return (
+            <Link
+              key={post.id}
+              to={`/posts/${post.id}`}
+              className="flex items-center justify-between gap-4 bg-[#FFFFFF] px-4 py-3"
+            >
+              <div className="flex items-center gap-4">
+                <ProfileImage name={post.writer.name} />
+                <div className="flex flex-col justify-center">
+                  <p className="line-clamp-1 text-base font-medium leading-normal text-black">
+                    {post.title}
+                  </p>
+                  <p className="line-clamp-2 text-sm font-normal leading-normal text-[#6B6B6B]">
+                    {post.writer.name} • {moment(post.createdDate).fromNow()}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        )
-      })}
+            </Link>
+          )
+        })}
 
-      <h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-black">
-        Posts
-      </h3>
-      {myPosts.map((post) => {
-        return (
-          <Link
-            key={post.id}
-            to={`/posts/${post.id}`}
-            className="flex items-center justify-between gap-4 bg-[#FFFFFF] px-4 py-3"
-          >
-            <div className="flex items-center gap-4">
-              <ProfileImage name={post.writer.name} />
-              <div className="flex flex-col justify-center">
-                <p className="line-clamp-1 text-base font-medium leading-normal text-black">
-                  {post.title}
-                </p>
-                <p className="line-clamp-2 text-sm font-normal leading-normal text-[#6B6B6B]">
-                  {post.writer.name} • {moment(post.createdDate).fromNow()}
-                </p>
+        <h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-black">
+          Posts
+        </h3>
+        {myPosts.map((post) => {
+          return (
+            <Link
+              key={post.id}
+              to={`/posts/${post.id}`}
+              className="flex items-center justify-between gap-4 bg-[#FFFFFF] px-4 py-3"
+            >
+              <div className="flex items-center gap-4">
+                <ProfileImage name={post.writer.name} />
+                <div className="flex flex-col justify-center">
+                  <p className="line-clamp-1 text-base font-medium leading-normal text-black">
+                    {post.title}
+                  </p>
+                  <p className="line-clamp-2 text-sm font-normal leading-normal text-[#6B6B6B]">
+                    {post.writer.name} • {moment(post.createdDate).fromNow()}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        )
-      })}
-      <h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-black">
-        Comments
-      </h3>
-      {myComments.map((comment) => {
-        return (
-          <Link
-            key={comment.comments.id}
-            to={`/posts/${comment.id}`}
-            className="flex items-center justify-between gap-4 bg-[#FFFFFF] px-4 py-3"
-          >
-            <div className="flex items-center gap-4">
-              <ProfileImage name={comment.writer.name} />
-              <div className="flex flex-col justify-center">
-                <p className="line-clamp-1 text-base font-medium leading-normal text-black">
-                  {comment.comments.content}
-                </p>
-                <p className="line-clamp-2 text-sm font-normal leading-normal text-[#6B6B6B]">
-                  {comment.comments.writer.name} •{' '}
-                  {moment(comment.comments.createdDate).fromNow()}
-                </p>
+            </Link>
+          )
+        })}
+        <h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em] text-black">
+          Comments
+        </h3>
+        {myComments.map((comment) => {
+          return (
+            <Link
+              key={comment.comments.id}
+              to={`/posts/${comment.id}`}
+              className="flex items-center justify-between gap-4 bg-[#FFFFFF] px-4 py-3"
+            >
+              <div className="flex items-center gap-4">
+                <ProfileImage name={comment.writer.name} />
+                <div className="flex flex-col justify-center">
+                  <p className="line-clamp-1 text-base font-medium leading-normal text-black">
+                    {comment.comments.content}
+                  </p>
+                  <p className="line-clamp-2 text-sm font-normal leading-normal text-[#6B6B6B]">
+                    {comment.comments.writer.name} •{' '}
+                    {moment(comment.comments.createdDate).fromNow()}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        )
-      })}
+            </Link>
+          )
+        })}
+      </div>
     </>
   )
 }

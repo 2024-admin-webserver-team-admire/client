@@ -7,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL
 
 const getPost = async (postId?: string): Promise<PostResponse> => {
   try {
-    const cookie = await get(`userViewedPosts/${postId}`)
+    const cookie = await get(`userViewedPosts`)
     const postResponse = await axios.get(`${API_URL}/posts/${postId}`, {
       headers: {
         Viewedposts: cookie
@@ -19,10 +19,7 @@ const getPost = async (postId?: string): Promise<PostResponse> => {
     )
     const comments = commentsResponse.data as PostResponse
     if (postResponse.headers['viewedposts']) {
-      await set(
-        `userViewedPosts/${postId}`,
-        postResponse.headers['viewedposts']
-      )
+      await set(`userViewedPosts`, postResponse.headers['viewedposts'])
     }
     return { ...post, comments: comments.comments }
   } catch (error) {
