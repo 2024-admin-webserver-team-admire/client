@@ -36,6 +36,10 @@ export default function SignUp() {
       errorToast('비밀번호를 입력해주세요.')
       return
     }
+    if (email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) === null) {
+      errorToast('이메일 형식이 올바르지 않습니다.')
+      return
+    }
     if (birth.match(/^\d{4}-\d{2}-\d{2}$/) === null) {
       errorToast('생년월일 형식이 올바르지 않습니다.')
       return
